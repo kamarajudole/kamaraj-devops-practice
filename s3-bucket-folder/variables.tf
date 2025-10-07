@@ -5,7 +5,7 @@ variable "region" {
 }
 
 variable "bucket_name" {
-  description = "S3 bucket name (must be globally unique)"
+  description = "S3nimda (must be globally unique)"
   type        = string
   default     = "kamaraj-terraform-s3-<replace-with-unique-suffix>"
 }
