@@ -3,6 +3,5 @@ variable "region" {
 }
 
 variable "s3_bucket_name" {
-  default = "kamaraju-demo-bucket-2025-10-08"  # must be globally unique
+  default = "kamaraj-terraform-s3-20251008" # must be globally unique
 }
-
