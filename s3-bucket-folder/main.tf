@@ -1,14 +1,23 @@
-variable "s3_bucket_name" {
-  default = "kamaraj-terraform-s3-20251008"
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  required_version = ">= 1.3.0"
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
 }
 
+# -----------------------------
+# S3 Bucket Creation
+# -----------------------------
 resource "aws_s3_bucket" "demo_bucket" {
   bucket        = var.s3_bucket_name
-  force_destroy = true
+  force_destroy = true  # allows TF to delete non-empty bucket if needed
 
   tags = {
     Name        = var.s3_bucket_name
@@ -17,6 +26,9 @@ resource "aws_s3_bucket" "demo_bucket" {
   }
 }
 
+# -----------------------------
+# Disable Public Access
+# -----------------------------
 resource "aws_s3_bucket_public_access_block" "block" {
   bucket = aws_s3_bucket.demo_bucket.id
 
@@ -26,6 +38,9 @@ resource "aws_s3_bucket_public_access_block" "block" {
   restrict_public_buckets = true
 }
 
+# -----------------------------
+# Ownership Controls (no ACL)
+# -----------------------------
 resource "aws_s3_bucket_ownership_controls" "ownership" {
   bucket = aws_s3_bucket.demo_bucket.id
 
@@ -34,6 +49,9 @@ resource "aws_s3_bucket_ownership_controls" "ownership" {
   }
 }
 
+# -----------------------------
+# Outputs
+# -----------------------------
 output "s3_bucket_name" {
   value = aws_s3_bucket.demo_bucket.bucket
 }
